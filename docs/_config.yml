@@ -1,26 +1,41 @@
-title: robotica
-description: "Video-to-Robot Teleoperation Pipeline for Unitree G1"
-url: "https://bushuyeu.github.io"
-baseurl: "/robotica"
+title: ʻIolani G1 Workshop
+description: "Video-to-robot teleoperation for the Unitree G1 humanoid: PromptHMR pose estimation, GMR retargeting, GR00T whole-body control."
+url: "https://bushuyeu.com"
+baseurl: "/iolani-g1-workshop"
 
-remote_theme: just-the-docs/just-the-docs
+# The pages use bushuyeu.com's own style: _layouts/default.html copies the site's head,
+# masthead and footer and loads its /style.css (same origin). No theme.
+workshop: "Workshop at ʻIolani School, spring 2026"
+repository_url: "https://github.com/bushuyeu/iolani-g1-workshop"
 
-color_scheme: bushuyeu
+markdown: kramdown
+kramdown:
+  input: GFM
+  hard_wrap: false
+  syntax_highlighter: rouge
 
-aux_links:
-  "GitHub":
-    - "https://github.com/bushuyeu/robotica"
-  "wandb Dashboard":
-    - "https://wandb.ai/pavelbushuyeu-university-of-hawaii-system/robotica"
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: default
 
-nav_enabled: true
-search_enabled: true
-
-
-plugins:
-  - jekyll-remote-theme
-  - jekyll-seo-tag
+# The guide nav under each page's standfirst. Each page sets the same url as its permalink,
+# without .html, as on bushuyeu.com.
+docnav:
+  - title: Overview
+    url: /
+  - title: Reproduction guide
+    url: /reproduction-guide
+  - title: Hardware deployment
+    url: /hardware-deployment-guide
+  - title: Commands
+    url: /commands
+  - title: Glossary
+    url: /glossary
 
 exclude:
   - Gemfile
   - Gemfile.lock
+  - "Humanoid Robot Info for AI Lab People .md"
+  - g1-doc-inaccuracy-review.md

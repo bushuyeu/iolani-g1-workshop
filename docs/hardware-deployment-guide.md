@@ -1,20 +1,15 @@
 ---
-layout: default
-title: Hardware Deployment
-nav_order: 3
+title: "Hardware deployment guide: Unitree G1"
+description: "Step-by-step guide for deploying the video-to-robot teleoperation pipeline on a physical Unitree G1 humanoid."
+permalink: /hardware-deployment-guide
+toc: true
 ---
-
-# Hardware Deployment Guide — Unitree G1
-
-Step-by-step guide for deploying the video-to-robot teleoperation pipeline on a physical Unitree G1 humanoid.
 
 **Prerequisite:** Complete the [Reproduction Guide](reproduction-guide.md) first. You should have a working sim pipeline (Stages 1-3) before attempting hardware deployment.
 
 > Check the [Glossary](glossary.md) for definitions of technical terms used in this guide.
 
----
-
-## What Changes Between Sim and Hardware
+## What changes between sim and hardware
 
 The GR00T-WBC control loop supports both simulation and real hardware through a single `--interface` flag. When you switch from `--interface sim` (the default) to `--interface real`, the following things change:
 
@@ -33,7 +28,7 @@ The motion publisher (`publish_upper_body_from_results.py`) is identical in both
 
 ---
 
-## Prerequisites Checklist
+## Prerequisites checklist
 
 ### Hardware
 
@@ -59,7 +54,7 @@ The motion publisher (`publish_upper_body_from_results.py`) is identical in both
 
 ---
 
-## 1. Network Setup
+## 1. Network setup
 
 The workstation communicates with the G1 over a direct Ethernet connection. The robot has two RJ45 ports on its neck — use either one.
 
@@ -110,7 +105,7 @@ This confirms bidirectional network access. Exit the SSH session before proceedi
 
 ---
 
-## 2. Robot Startup Procedure
+## 2. Robot startup procedure
 
 **Use the hanging method** — suspend the robot from its shoulder buckles so its feet are off the ground. This prevents falls during initialization and gives you a safe window to verify everything before the robot bears its own weight.
 
@@ -145,16 +140,16 @@ If this works, the robot is booted and the network is ready.
 
 ---
 
-## 3. Deployment Procedure
+## 3. Deployment procedure
 
 The following example uses video `PXL_20260114_214954286` throughout. Replace with your video name as needed.
 
 ### 3.1 Prepare the retarget results
 
-Copy retarget `.pkl` files to the Docker-accessible location. The deploy Docker container mounts the directory it is launched from (`~/Projects/robotica/GR00T-WholeBodyControl`), so results must be placed there — not in the standalone `~/Projects/GR00T-WholeBodyControl` directory used for simulation.
+Copy retarget `.pkl` files to the Docker-accessible location. The deploy Docker container mounts the directory it is launched from (`~/Projects/iolani-g1-workshop/GR00T-WholeBodyControl`), so results must be placed there — not in the standalone `~/Projects/GR00T-WholeBodyControl` directory used for simulation.
 
 ```bash
-cd ~/Projects/robotica
+cd ~/Projects/iolani-g1-workshop
 
 # Copy results directly to the deploy Docker path
 mkdir -p GR00T-WholeBodyControl/resources/poses
@@ -162,7 +157,7 @@ cp results/PXL_20260114_214954286/retarget_unitree_g1.pkl \
    GR00T-WholeBodyControl/resources/poses/PXL_20260114_214954286.pkl
 ```
 
-> **Simulation vs. hardware paths:** The reproduction guide (simulation) uses the standalone `~/Projects/GR00T-WholeBodyControl` via `just groot-copy`. For hardware deployment, copy directly to `~/Projects/robotica/GR00T-WholeBodyControl` instead — the deploy container mounts this directory.
+> **Simulation vs. hardware paths:** The reproduction guide (simulation) uses the standalone `~/Projects/GR00T-WholeBodyControl` via `just groot-copy`. For hardware deployment, copy directly to `~/Projects/iolani-g1-workshop/GR00T-WholeBodyControl` instead — the deploy container mounts this directory.
 
 ### 3.2 Find your Ethernet interface name
 
@@ -181,7 +176,7 @@ Enable X11 forwarding for Docker, then start the deploy container with the speci
 ```bash
 xhost +local:docker
 
-cd ~/Projects/robotica/GR00T-WholeBodyControl && ./docker/run_docker.sh --deploy --root --interface enp39s0 --no-with_hands --no-data_collection --no-enable_upper_body_operation --no-enable_webcam_recording --no-view_camera
+cd ~/Projects/iolani-g1-workshop/GR00T-WholeBodyControl && ./docker/run_docker.sh --deploy --root --interface enp39s0 --no-with_hands --no-data_collection --no-enable_upper_body_operation --no-enable_webcam_recording --no-view_camera
 ```
 
 > **Note:** Pass the actual Ethernet interface name (e.g., `enp39s0`) instead of `real`. Using `--interface real` may fail with `does not match an available interface` if CycloneDDS cannot auto-detect the correct interface inside Docker.
@@ -259,9 +254,9 @@ The control loop in Terminal 1 does not need to be restarted.
 
 ---
 
-## 4. Safety Procedures
+## 4. Safety procedures
 
-### Emergency Stop Options
+### Emergency stop options
 
 There are three ways to stop the robot immediately. The safety operator should know all three:
 
@@ -276,14 +271,14 @@ There are three ways to stop the robot immediately. The safety operator should k
 2. **L2 + Y** (zero torque) — if damping is not enough or the robot is moving dangerously. The robot will fall, so make sure the area is clear.
 3. **Backtick** — use this if the remote controller is not responding, or as a supplement to the remote e-stop.
 
-### Safety Roles
+### Safety roles
 
 - **Operator** (at the workstation): runs commands, monitors terminal output, can use keyboard e-stop.
 - **Safety observer** (holding remote controller): watches the robot, ready to press L2+B or L2+Y at any moment. Does not need to interact with the workstation.
 
 **Never run the hardware pipeline alone.** Always have a safety observer present with the remote controller.
 
-### Joint Safety Monitor
+### Joint safety monitor
 
 The GR00T-WBC control loop includes a `JointSafetyMonitor` that continuously checks joint velocities:
 
@@ -298,7 +293,7 @@ If any joint exceeds its velocity limit, the control loop calls `sys.exit(1)` im
 2. Use **L2 + B** on the remote to ensure damping mode.
 3. Investigate which joint exceeded the limit before restarting.
 
-### What To Do If the Robot Falls
+### What to do if the robot falls
 
 1. Press **L2 + Y** (zero torque) immediately to prevent motor damage from the robot fighting against the ground.
 2. Kill the control loop (backtick or Ctrl+C).
@@ -307,9 +302,9 @@ If any joint exceeds its velocity limit, the control loop calls `sys.exit(1)` im
 
 ---
 
-## 5. Known Risks
+## 5. Known risks
 
-### Balance Policy Limitations
+### Balance policy limitations
 
 The balance policy (ONNX checkpoint shipped with GR00T-WBC) was trained in simulation and has known limitations:
 
@@ -318,7 +313,7 @@ The balance policy (ONNX checkpoint shipped with GR00T-WBC) was trained in simul
 - **Upper body speed sensitivity:** Fast arm motions shift the center of mass beyond what the balance policy can compensate for. This is why `--speed 0.25` is critical.
 - **No newer checkpoint available:** NVIDIA has not released an improved balance checkpoint, and the Decoupled WBC training code is not publicly available.
 
-### Sim-to-Real Gaps
+### Sim-to-real gaps
 
 | Gap | Impact | Mitigation |
 |-----|--------|------------|
@@ -328,7 +323,7 @@ The balance policy (ONNX checkpoint shipped with GR00T-WBC) was trained in simul
 | Floor surface | Sim assumes flat, high-friction ground | Use flat, non-slip flooring. Avoid carpet or polished surfaces. |
 | Cable drag | Ethernet cable exerts force on the robot | Route cable overhead or use enough slack to avoid pulling |
 
-### Speed Limits
+### Speed limits
 
 | Parameter | Recommended Value | Why |
 |-----------|------------------|-----|
@@ -336,11 +331,11 @@ The balance policy (ONNX checkpoint shipped with GR00T-WBC) was trained in simul
 | `upper_body_joint_speed` (configs.py) | 5.0 rad/s (default) | Must stay below ARM_VELOCITY_LIMIT (6.0 rad/s) to avoid hard shutdown. Tunable per-video via `--upper-body-joint-speed` CLI arg on the control loop |
 | `--smooth` (publisher) | 3.0 (recommended) | Gaussian smoothing of pose data. Removes jitter from noisy PromptHMR tracking. Higher = smoother but less faithful. 0 = disabled |
 | `--two-pass` (publisher) | Recommended for hardware | Two-pass collision removal. Pass 1 plays the trajectory once while the sim logs all self-collisions. Pass 2 fixes those frames by interpolating through them smoothly, then loops. Catches collisions caused by the balance policy's leg motion that static checks miss |
-| `--collision-free` (publisher) | Alternative to --two-pass | Static MuJoCo collision check on all frames before playback. Faster but less accurate — doesn't account for balance policy leg motion. Use `--two-pass` when possible |
+| `--collision-free` (publisher) | Alternative to `--two-pass` | Static MuJoCo collision check on all frames before playback. Faster but less accurate — doesn't account for balance policy leg motion. Use `--two-pass` when possible |
 
 **Gradually increase speed only after confirming stability** at the current speed. Suggested progression: 0.25 -> 0.35 -> 0.5. Do not exceed 0.5 on first deployment.
 
-### Safety Monitors
+### Safety monitors
 
 | Check | Threshold | Behavior |
 |-------|-----------|----------|
@@ -362,7 +357,7 @@ The balance policy (ONNX checkpoint shipped with GR00T-WBC) was trained in simul
 | DDS topics not discovered | Ensure Docker is running with `--deploy` flag (host networking). Check that no firewall blocks UDP on the `192.168.123.0/24` subnet. |
 | SSH works but control loop cannot connect | The control loop auto-detects the interface with a `192.168.123.*` IP. If you have multiple interfaces in that subnet, disconnect the extras. |
 
-### Robot Startup
+### Robot startup
 
 | Problem | Solution |
 |---------|----------|
@@ -370,7 +365,7 @@ The balance policy (ONNX checkpoint shipped with GR00T-WBC) was trained in simul
 | L2+R2 does not release locomotion controller | Make sure you pressed L2+B (damping) first. The remote controller must be paired with the robot (it pairs automatically on boot). |
 | Robot jerks on startup | This can happen if debug mode was not entered cleanly. Power cycle and repeat Section 2. |
 
-### Control Loop
+### Control loop
 
 | Problem | Solution |
 |---------|----------|
@@ -393,7 +388,7 @@ The balance policy (ONNX checkpoint shipped with GR00T-WBC) was trained in simul
 
 ---
 
-## 7. Quick Reference Card
+## 7. Quick reference card
 
 Print this section and keep it near the robot during deployment.
 

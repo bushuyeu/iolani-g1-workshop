@@ -1,16 +1,12 @@
 ---
-layout: default
-title: Command Reference
-nav_order: 4
+title: Command reference
+description: "Every just recipe in the workshop repo, grouped by pipeline stage."
+permalink: /commands
 ---
 
-# Command Reference
+All commands are run from the `iolani-g1-workshop/` root directory using [just](https://just.systems/).
 
-All commands are run from the `robotica/` root directory using [just](https://just.systems/).
-
----
-
-## Setup & Verification
+## Setup & verification
 
 | Command | Description |
 |---------|-------------|
@@ -31,7 +27,7 @@ All commands are run from the `robotica/` root directory using [just](https://ju
 
 PromptHMR automatically skips videos that already have results.
 
-## Pipeline — Stage 2 (GMR Retarget)
+## Pipeline — Stage 2 (GMR retarget)
 
 | Command | Description |
 |---------|-------------|
@@ -57,7 +53,7 @@ PromptHMR automatically skips videos that already have results.
 
 Monitored recipes log to [wandb](https://wandb.ai/) with per-video metrics tables and batch summary scalars. The batch variant also uploads `.pkl` artifacts to Hugging Face Hub.
 
-### wandb Metrics
+### wandb metrics
 
 | Metric | Type |
 |--------|------|
@@ -68,7 +64,7 @@ Monitored recipes log to [wandb](https://wandb.ai/) with per-video metrics table
 | `batch/errors` | Scalar |
 | `batch/total_duration_s` | Scalar |
 
-## Pipeline — Stage 3 (GR00T-WBC Simulation)
+## Pipeline — Stage 3 (GR00T-WBC simulation)
 
 | Command | Description |
 |---------|-------------|
@@ -77,9 +73,9 @@ Monitored recipes log to [wandb](https://wandb.ai/) with per-video metrics table
 | `just groot-copy <video>` | Copy retarget `.pkl` to standalone GR00T repo |
 | `just groot-copy-all` | Copy all retarget results to GR00T |
 
-Stage 3 is interactive and requires two terminals inside Docker. See the [Reproduction Guide]({% link reproduction-guide.md %}#5-stage-3--simulate-in-groot-wbc) for full instructions.
+Stage 3 is interactive and requires two terminals inside Docker. See the [Reproduction Guide](reproduction-guide.md#5-stage-3--simulate-in-gr00t-wbc) for full instructions.
 
-## Google Drive Sync
+## Google Drive sync
 
 | Command | Description |
 |---------|-------------|

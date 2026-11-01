@@ -1,20 +1,15 @@
 ---
-layout: default
-title: Reproduction Guide
-nav_order: 2
+title: "Reproduction guide: teleoperation from recorded video"
+description: "Step-by-step guide for reproducing upper-body teleoperation of the Unitree G1 robot from recorded video."
+permalink: /reproduction-guide
+toc: true
 ---
-
-# Teleoperation from Recorded Video — Reproduction Guide
-
-Step-by-step guide for reproducing upper-body teleoperation of the Unitree G1 robot from recorded video.
 
 **Pipeline:** Video → PromptHMR (3D pose) → GMR (retarget) → GR00T-WBC (sim/hardware)
 
 > Check the [Glossary](glossary.md) for definitions of technical terms used in this guide.
 
----
-
-## What This Project Does
+## What this project does
 
 Imagine watching a video of someone waving their arms and having a robot copy those exact movements in real time. That is what this pipeline does. It takes an ordinary video of a person, figures out how their body is moving in 3D space, translates those movements into commands a robot can understand, and then replays the motion on a simulated Unitree G1 humanoid robot.
 
@@ -30,7 +25,7 @@ You do not need a background in machine learning or robotics to follow this guid
 
 - **Hardware:** Linux workstation with NVIDIA GPU (RTX 3090+, CUDA compute 8.6+)
 - **Software:** git, curl, bash, ffmpeg, Docker, NVIDIA Container Toolkit
-- **Accounts:** `gcloud` CLI with access to `gs://io-robotica` (or SMPL-X credentials at https://smpl-x.is.tue.mpg.de as fallback)
+- **Accounts:** `gcloud` CLI with access to `gs://io-robotica` (or [SMPL-X credentials](https://smpl-x.is.tue.mpg.de) as fallback)
 - **Package manager:** [uv](https://astral.sh/uv) (v0.10.2+)
 
 **Disk space and time estimates:**
@@ -109,18 +104,18 @@ If you **cannot get GCS access**, `setup.sh` will automatically fall back to:
 
 ---
 
-## 1. Clone the Meta-Repo
+## 1. Clone the meta-repo
 
 ```bash
 cd ~/Projects
-git clone https://github.com/bushuyeu/robotica robotica && cd robotica
+git clone https://github.com/bushuyeu/iolani-g1-workshop && cd iolani-g1-workshop
 bash setup.sh    # clones sub-repos, creates venvs, installs deps, sets up symlinks
 just check       # verify everything is set up (should show all [OK])
 ```
 
 The `setup.sh` script is idempotent — safe to re-run if something fails partway through.
 
-### What `setup.sh` does:
+### What `setup.sh` does
 1. **Pre-flight checks** — verifies NVIDIA driver, git, git-lfs, curl, ffmpeg, disk space, gcloud auth
 2. **Install uv** — Python package manager (if not already installed)
 3. **Install just** — command runner (if not already installed)
@@ -139,7 +134,7 @@ The `setup.sh` script is idempotent — safe to re-run if something fails partwa
 
 ---
 
-## 2. Prepare Input Video
+## 2. Prepare input video
 
 Place your video file in `data/videos/`:
 
@@ -157,7 +152,7 @@ Videos from the team pool: https://drive.google.com/drive/folders/11I9UZfqr_Janm
 
 ---
 
-## 3. Stage 1 — Extract 3D Pose (PromptHMR)
+## 3. Stage 1 — Extract 3D pose (PromptHMR)
 
 ```bash
 just phmr-run data/videos/your_video.mp4
@@ -219,7 +214,7 @@ just phmr-batch
 
 ---
 
-## 4. Stage 2 — Retarget to Robot (GMR)
+## 4. Stage 2 — Retarget to robot (GMR)
 
 ```bash
 just gmr-retarget data/videos/your_video.mp4
@@ -310,18 +305,18 @@ xhost +local:docker
 
 ### 5.2 Copy retarget results to Docker-accessible location
 
-The Docker container mounts the directory it is launched from — `~/Projects/robotica/GR00T-WholeBodyControl` per Section 5.3. Copy results there:
+The Docker container mounts the directory it is launched from — `~/Projects/iolani-g1-workshop/GR00T-WholeBodyControl` per Section 5.3. Copy results there:
 
 ```bash
-mkdir -p ~/Projects/robotica/GR00T-WholeBodyControl/resources/poses/
+mkdir -p ~/Projects/iolani-g1-workshop/GR00T-WholeBodyControl/resources/poses/
 cp results/<video_name>/retarget_unitree_g1.pkl \
-   ~/Projects/robotica/GR00T-WholeBodyControl/resources/poses/<video_name>.pkl
+   ~/Projects/iolani-g1-workshop/GR00T-WholeBodyControl/resources/poses/<video_name>.pkl
 ```
 
 ### 5.3 Terminal 1 — Start control loop
 
 ```bash
-cd ~/Projects/robotica/GR00T-WholeBodyControl
+cd ~/Projects/iolani-g1-workshop/GR00T-WholeBodyControl
 ./docker/run_docker.sh --root
 # (enter sudo password if prompted)
 
@@ -409,11 +404,11 @@ In **Terminal 1** (the terminal running the control loop, NOT the viewer window)
 - **Legs shaking on bent knees:** Normal — the balance policy is actively stabilizing. Safe to proceed.
 - **`groups: cannot find name for group ID 994`:** Harmless Docker warning — can be safely ignored.
 - **Command pasting breaks in Docker terminal:** Multi-line paste with backslash continuations can fail inside the container. Paste commands as a single line, or type them manually.
-- **Retarget `.pkl` not found inside container:** The Docker container mounts the directory it was launched from (`~/Projects/robotica/GR00T-WholeBodyControl` per Section 5.3). Make sure you copied the `.pkl` to that directory's `resources/poses/` subdirectory (see Section 5.2).
+- **Retarget `.pkl` not found inside container:** The Docker container mounts the directory it was launched from (`~/Projects/iolani-g1-workshop/GR00T-WholeBodyControl` per Section 5.3). Make sure you copied the `.pkl` to that directory's `resources/poses/` subdirectory (see Section 5.2).
 
 ---
 
-## 6. Quick Reference
+## 6. Quick reference
 
 ### Full pipeline for a single video
 
@@ -443,7 +438,7 @@ results/
 
 ---
 
-## Appendix: Architecture
+## Appendix: architecture
 
 Each sub-repo has its own virtual environment due to irreconcilable dependencies:
 
