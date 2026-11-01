@@ -1,0 +1,183 @@
+<!doctype html>
+{%- comment -%}
+  The one layout for the workshop docs. It is a copy of a bushuyeu.com page (head, masthead,
+  footer from projects.html in bushuyeu/bushuyeu.github.io), so the docs look like the rest of
+  the site. GitHub Pages serves these docs at bushuyeu.com/iolani-g1-workshop/, the same origin
+  as the site, so the site's /style.css, /theme.js, /faro.js and /media/ load from there by
+  root-absolute URLs. When the site's head, tab row or footer change, copy them here again.
+{%- endcomment -%}
+{%- if page.url == "/" -%}
+  {%- assign doc_title = site.title | append: " — Pavel Bushuyeu" -%}
+{%- else -%}
+  {%- assign doc_title = page.title | append: " — " | append: site.title -%}
+{%- endif -%}
+{%- assign doc_description = page.description | default: site.description | strip_html | normalize_whitespace -%}
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<script>/* Theme: apply a stored Light/Dark pick before the first paint (theme.js) */(function(){var r=document.documentElement;try{var t=localStorage.getItem("theme");if(t==="light"||t==="dark"){r.setAttribute("data-theme",t);document.querySelector('meta[name="color-scheme"]').content=t}}catch(e){}r.classList.add("theme-js")})()</script>
+<title>{{ doc_title }}</title>
+<meta name="description" content="{{ doc_description }}">
+<link rel="canonical" href="{{ page.url | absolute_url }}">
+<meta property="og:type" content="website">
+<meta property="og:title" content="{{ doc_title }}">
+<meta property="og:description" content="{{ doc_description }}">
+<meta property="og:url" content="{{ page.url | absolute_url }}">
+<meta property="og:image" content="https://bushuyeu.com/media/og-card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Pavel Bushuyeu, AI researcher, University of Hawaiʻi at Mānoa">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://bushuyeu.com/media/og-card.jpg">
+<link rel="icon" href="/favicon-32.png?v=3" type="image/png" sizes="32x32">
+<link rel="icon" href="/icon-512.png?v=3" type="image/png" sizes="512x512">
+<link rel="apple-touch-icon" href="/apple-touch-icon.png?v=3">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="alternate" type="application/rss+xml" title="Pavel Bushuyeu — News" href="https://bushuyeu.com/feed.xml">
+<link rel="stylesheet" href="/style.css?v=34">
+<style>
+/* Docs only, built from the tokens in /style.css. .prose there styles the markdown; these
+   rules add the guide nav, the "On this page" list, and the elements .prose leaves out. */
+.docnav { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.toc ul { list-style: none; margin: 14px 0 0; padding: 0; columns: 2 16rem; column-gap: 32px; font-size: 0.92rem; line-height: 1.45; }
+.toc li { break-inside: avoid; padding-block: 3px; }
+.prose hr { border: 0; height: 1px; background: var(--hair-soft); margin: 2.4em 0 0; }
+.prose hr + h2 { margin-top: 1.6em; }
+.prose h4 { font-size: 0.95rem; letter-spacing: -0.015em; margin-top: 1.4em; }
+.prose h2, .prose h3, .prose h4 { scroll-margin-top: 24px; }
+.prose h2 + h3 { margin-top: 0.9em; }
+/* GFM task lists: the checkbox takes the bullet's place. */
+.prose .task-list-item { list-style: none; }
+.prose .task-list-item-checkbox { margin: 0 0.5em 0 -1.3em; vertical-align: -0.1em; accent-color: var(--link); }
+.prose .scroll { max-width: 100%; }
+.prose td code { overflow-wrap: anywhere; }
+/* Rouge marks comments in code blocks; grey them like the site's secondary text. */
+.prose .highlight :is(.c, .c1, .cm, .cs, .ch, .cd) { color: var(--ink-3); }
+@media (max-width: 640px) {
+  .toc ul { columns: 1; }
+  .toc li { padding-block: 6px; }
+}
+</style>
+<script type="application/ld+json">
+{"@context": "https://schema.org", "@type": "WebPage", "author": {"@type": "Person", "@id": "https://bushuyeu.com/#person", "name": "Pavel Bushuyeu", "url": "https://bushuyeu.com/"}}
+</script>
+<script src="/faro.js" async></script>
+<script src="/theme.js?v=2" defer></script>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <div class="topbar">
+      <nav class="eyebrow eyebrow-nav" aria-label="Main">
+        <a href="/">Home</a>
+        <a href="/research">Research</a>
+        <a href="/teaching">Teaching</a>
+        <a href="/product-management">Product management</a>
+        <a href="/services">Services</a>
+      </nav>
+      <button type="button" class="theme-switch" role="switch" aria-checked="false" aria-label="Dark mode" title="Dark mode">
+        <svg class="theme-switch__moon" aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M13.6 9.9A5.7 5.7 0 0 1 6.1 2.4a5.8 5.8 0 1 0 7.5 7.5z"/></svg>
+        <svg class="theme-switch__sun" aria-hidden="true" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="3"/><path d="M8 1.3v1.5M8 13.2v1.5M1.3 8h1.5M13.2 8h1.5M3.3 3.3l1 1M11.7 11.7l1 1M3.3 12.7l1-1M11.7 4.3l1-1"/></svg>
+      </button>
+    </div>
+    <h1>{{ page.title }}</h1>
+    <p class="sub">{{ page.description }}</p>
+    <div class="meta">
+      {%- if page.url == "/" %}
+      <span>{{ site.workshop }}</span>
+      {%- else %}
+      <a href="{{ '/' | relative_url }}">{{ site.title }}</a>
+      {%- endif %}
+      <a rel="noopener" target="_blank" href="{{ site.repository_url }}">GitHub</a>
+      <a rel="noopener" target="_blank" href="{{ site.repository_url }}/blob/main/docs/{{ page.path }}">page source</a>
+    </div>
+    <nav class="docnav" aria-label="Workshop guides">
+      {%- for item in site.docnav %}
+      <a class="pill-link{% if page.url == item.url %} pill-link--accent{% endif %}" href="{{ item.url | relative_url }}"{% if page.url == item.url %} aria-current="page"{% endif %}>{{ item.title }}</a>
+      {%- endfor %}
+    </nav>
+  </div>
+</header>
+{%- if page.toc %}
+{%- assign heads = content | split: '<h2 id="' %}
+
+<section>
+  <div class="wrap">
+    <nav class="toc" aria-labelledby="toc-h">
+      <h2 class="eyebrow" id="toc-h">On this page</h2>
+      <ul>
+        {%- for head in heads offset: 1 %}
+        {%- assign id = head | split: '"' | first %}
+        {%- assign label = head | split: '</h2>' | first | remove_first: id | remove_first: '">' | strip_html %}
+        <li><a href="#{{ id }}">{{ label }}</a></li>
+        {%- endfor %}
+      </ul>
+    </nav>
+  </div>
+</section>
+{%- endif %}
+
+<section>
+  <div class="wrap">
+    <div class="prose">
+{{ content | replace: '<table>', '<div class="scroll"><table>' | replace: '</table>', '</table></div>' }}
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <p class="backlink"><a href="/projects">← All projects</a></p>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <div class="footer-cols">
+      <img class="footer-portrait" src="/media/portrait.jpg" alt="Portrait of Pavel Bushuyeu" width="640" height="640" loading="lazy">
+      <nav aria-label="Site">
+        <h2 class="footer-h">Site</h2>
+        <ul>
+          <li><a href="/research">Research</a></li>
+          <li><a href="/teaching">Teaching</a></li>
+          <li><a href="/product-management">Product management</a></li>
+          <li><a href="/services">Services</a></li>
+          <li><a href="/projects">Projects</a></li>
+          <li><a href="/paper-review">Paper review</a></li>
+        </ul>
+      </nav>
+      <nav aria-label="Profiles">
+        <h2 class="footer-h">Elsewhere</h2>
+        <ul>
+          <li><a rel="noopener" target="_blank" href="https://linkedin.com/in/bushuyeu/">LinkedIn</a></li>
+          <li><a rel="noopener" target="_blank" href="https://github.com/bushuyeu">GitHub</a></li>
+          <li><a rel="noopener" target="_blank" href="https://huggingface.co/bushuyeu">Hugging Face</a></li>
+          <li><a rel="noopener" target="_blank" href="https://scholar.google.com/citations?user=ub3osgUAAAAJ">Google Scholar</a></li>
+          <li><a rel="noopener" target="_blank" href="https://orcid.org/0009-0009-7183-6714">ORCID</a></li>
+          <li><a rel="noopener" target="_blank" href="https://openreview.net/profile?id=~Pavel_Bushuyeu1">OpenReview</a></li>
+          <li><a rel="noopener" target="_blank" href="https://www.semanticscholar.org/author/2405429742">Semantic Scholar</a></li>
+          <li><a rel="noopener" target="_blank" href="https://www.researchgate.net/profile/Pavel-Bushuyeu">ResearchGate</a></li>
+        </ul>
+      </nav>
+      <div>
+        <h2 class="footer-h">Contact</h2>
+        <ul>
+          <li><a href="mailto:pavelbushuyeu@gmail.com">pavelbushuyeu@gmail.com</a></li>
+          <li><a rel="noopener" target="_blank" href="https://calendar.app.google/aTs1mDgEEfqNLnNf6">Schedule a call</a></li>
+          <li><a href="https://follow.it/pavel-bushuyeu-news" rel="noopener" target="_blank">Subscribe to updates</a></li>
+          <li><a href="/feed.xml">RSS feed</a></li>
+          <li><a href="/Pavel-Bushuyeu-CV.pdf" download>Download Resume</a></li>
+        </ul>
+      </div>
+    </div>
+    <p class="footer-base">© 2026 Pavel Bushuyeu</p>
+  </div>
+</footer>
+
+</body>
+</html>

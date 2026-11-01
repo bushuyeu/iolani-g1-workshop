@@ -1,13 +1,7 @@
 ---
-layout: default
 title: Glossary
-nav_order: 5
----
-
-# Glossary
-
-Quick reference for technical terms used throughout this project. Definitions are kept short and beginner-friendly.
-
+description: "Quick reference for technical terms used throughout this project. Definitions are kept short and beginner-friendly."
+permalink: /glossary
 ---
 
 **Balance policy** — A learned controller that keeps the robot standing upright. It constantly adjusts the robot's legs and torso to compensate for arm movements or external pushes, much like how you shift your weight when carrying something heavy.

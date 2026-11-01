@@ -1,4 +1,4 @@
-# robotica
+# ʻIolani G1 Workshop
 
 Meta-repo for the video-to-robot teleoperation pipeline.
 
@@ -21,7 +21,7 @@ flowchart LR
 ## Architecture
 
 ```
-robotica/
+iolani-g1-workshop/
 ├── setup.sh                 # One-command bootstrap
 ├── Justfile                 # All CLI recipes
 ├── .env                     # Sub-repo paths (auto-generated)
@@ -44,7 +44,7 @@ robotica/
 ## Quickstart
 
 ```bash
-git clone https://github.com/bushuyeu/robotica robotica && cd robotica
+git clone https://github.com/bushuyeu/iolani-g1-workshop && cd iolani-g1-workshop
 bash setup.sh       # clones repos, creates venvs, installs deps
 just check           # verify everything is set up
 ```

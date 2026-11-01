@@ -1,20 +1,10 @@
 ---
-layout: default
-title: Home
-nav_order: 1
+title: ʻIolani G1 Workshop
+description: "Video-to-robot teleoperation for the Unitree G1 humanoid. Turn ordinary video into robot motion: no suits, no sensors, just a camera."
+permalink: /
 ---
 
-# robotica
-
-**Video-to-Robot Teleoperation Pipeline for Unitree G1**
-
-Turn ordinary video into robot motion — no suits, no sensors, just a camera.
-
-{: .fs-6 .fw-300 }
-
----
-
-## Pipeline Overview
+## Pipeline overview
 
 ```
 Video (.mp4)  →  PromptHMR  →  GMR  →  GR00T-WBC  →  Unitree G1
@@ -30,7 +20,7 @@ Video (.mp4)  →  PromptHMR  →  GMR  →  GR00T-WBC  →  Unitree G1
 ## Quickstart
 
 ```bash
-git clone https://github.com/bushuyeu/robotica robotica && cd robotica
+git clone https://github.com/bushuyeu/iolani-g1-workshop && cd iolani-g1-workshop
 bash setup.sh       # clones repos, creates venvs, installs deps (~30 min)
 just check           # verify everything is set up
 
@@ -44,7 +34,7 @@ just pipeline-monitored-batch
 ## Architecture
 
 ```
-robotica/
+iolani-g1-workshop/
 ├── setup.sh                 # One-command bootstrap
 ├── Justfile                 # All CLI recipes
 ├── .env                     # Sub-repo paths (auto-generated)
@@ -72,7 +62,7 @@ Each sub-repo has its own Python virtual environment due to irreconcilable depen
 
 | Guide | Description |
 |-------|-------------|
-| [Reproduction Guide]({% link reproduction-guide.md %}) | Full walkthrough of the sim pipeline (Stages 1-3) |
-| [Hardware Deployment]({% link hardware-deployment-guide.md %}) | Deploying on a physical Unitree G1 |
-| [Command Reference]({% link commands.md %}) | All `just` recipes with descriptions |
-| [Glossary]({% link glossary.md %}) | Definitions of technical terms |
+| [Reproduction guide](reproduction-guide.md) | Full walkthrough of the sim pipeline (Stages 1-3) |
+| [Hardware deployment](hardware-deployment-guide.md) | Deploying on a physical Unitree G1 |
+| [Command reference](commands.md) | All `just` recipes with descriptions |
+| [Glossary](glossary.md) | Definitions of technical terms |
